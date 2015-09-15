@@ -1,0 +1,62 @@
+﻿<Window x:Class="WPFStyle.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="BurlyWood"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName= Radio,Path=IsChecked}" Value="true">
+                    <Setter Property="FontSize" Value="20"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ContentControl" x:Key="MyStyle">
+            <Setter Property="Background" Value="Pink"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style  TargetType="Button" BasedOn="{StaticResource MyStyle}">
+            <Setter Property="Background" Value="Red"/>
+            
+            <Style.Triggers>
+                
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="true"/>
+                        <Condition Property="IsPressed" Value="true"/>
+                    </MultiTrigger.Conditions>
+                    <Setter  Property="Background" Value="Pink"/>
+                </MultiTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Label Style="{StaticResource ResourceKey=MyStyle}" 
+              Content="Label" Margin="10,76,361,201" Name="Label1"/>
+       
+        <Button  Content=" BT Child 1" Margin="283,121,79,158">
+            <Button.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="Blue"></Setter>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+
+        <RadioButton Style="{StaticResource RadioButtonStyle}" Name="Radio" Content=" I WANT TO BE 20" Margin="106,195,180,65"></RadioButton>
+
+    </Grid>
+
+   
+
+
+
+
+
+
+</Window>

@@ -1,0 +1,29 @@
+﻿<Window x:Class="WPFDotNetObjectBindingControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WPFDotNetObjectBindingControl"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <local:ColorConvert x:Key="MyConvert"/>
+        <Style x:Key="Myitem" TargetType="{x:Type ListViewItem}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <Binding RelativeSource="{RelativeSource Self}" Converter="{StaticResource  MyConvert}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <ListView ItemContainerStyle="{StaticResource Myitem}" Height="248" HorizontalAlignment="Left" Margin="58,10,0,0" Name="ListView1" VerticalAlignment="Top" Width="394">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="姓名"  DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="年龄" DisplayMemberBinding="{Binding Age}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

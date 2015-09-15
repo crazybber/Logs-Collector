@@ -1,0 +1,23 @@
+﻿<Window x:Class="WPFSomthingLeft.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WPFSomthingLeft"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Dictionary1.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <local:UserControl1 x:Name="TestUserControl1" Margin="284,27,10,142"></local:UserControl1>
+
+        <local:TimeControl x:Name="TimeCustomTextBlock" Margin="248,15,99,239"></local:TimeControl>
+
+        <local:CustomTextBlock Text="{Binding RelativeSource={RelativeSource Self}, Path=Time}" Margin="22,90,366,192"/>
+
+        <Button Content="button" Style="{ StaticResource BackColor}" Height="23" HorizontalAlignment="Left" Margin="22,26,0,0" Name="Button11" VerticalAlignment="Top" Width="75" Click="Button11_Click"></Button>
+        <Label x:Name="LabelTime1111"  Content="Label" HorizontalAlignment="Left" Margin="22,158,0,0" VerticalAlignment="Top" Height="27" Width="163"/>
+    </Grid>
+</Window>

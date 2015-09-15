@@ -1,0 +1,69 @@
+﻿<Window x:Class="WPFControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WPFControl"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="MainWindow" Height="448.768" Width="622.014">
+    <Canvas Margin="0,0,-8,-3">
+
+        <Button ClickMode="Hover" Content="repetbutton" IsDefault="True" Name="Button1" Click="Button1_OnClick" Canvas.Top="10" Height="43" Width="83" />
+
+        <TextBox Canvas.Left="120" Canvas.Top="21" Height="33" Name="TextBox1" Width="81" Text="0" />
+        <RepeatButton x:Name="Test" Delay="100" Click="Test_Click" Width="79"
+                      Content="确定" Height="33" Canvas.Left="227" Canvas.Top="21" />
+        <CheckBox Content="CheckBox" Height="16" HorizontalAlignment="Left" Name="CheckBox1" VerticalAlignment="Top" IsThreeState="True" Indeterminate="CheckBox1_OnIndeterminate" Canvas.Left="345" Canvas.Top="37" />
+
+        <Expander Height="78" Name="Expander1" Width="145" Header="年龄组" Canvas.Left="10" Canvas.Top="89">
+            <StackPanel>
+                <RadioButton Content="RadioButton1" Height="16" Name="RadioButton1" />
+                <RadioButton Content="RadioButton2" Height="16"  Name="RadioButton2" />
+            </StackPanel>
+        </Expander>
+
+        <ScrollViewer Height="65" HorizontalAlignment="Left"
+                      Name="ScrollViewer1" VerticalAlignment="Top" Width="103" 
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Canvas.Left="175" Canvas.Top="89">
+            <StackPanel x:Name="TestStack" Orientation="Horizontal">
+            </StackPanel>
+
+        </ScrollViewer>
+
+        <TabControl Name="TabControl1" TabStripPlacement="Right" Height="99" Width="250" Canvas.Left="25" Canvas.Top="185">
+            <TabItem Header="Mon" Name="Tab1">
+                <TabItem.Content>
+                    <TextBlock x:Name="TestBlock11" Text="you know it"/>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Tue" Name="Tab2">
+                <TabItem.Content>
+                    <TextBlock x:Name="TestBlock22" Text="you know it"/>
+                </TabItem.Content>
+            </TabItem>
+
+        </TabControl>
+
+        <ListView  ItemsSource="{Binding PersonList}" Canvas.Left="339" Canvas.Top="172" Height="103" Width="201">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
+                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Path=Age}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Content="删除一行" Click="Button_Click" Canvas.Left="283" Canvas.Top="280" Width="59" />
+
+
+        <StackPanel Height="78" Name="StackPanel2" Width="249" Canvas.Left="317" Canvas.Top="89">
+            <ScrollBar x:Name="TestScrollBar" Orientation="Horizontal" Maximum="100" Minimum="5" SmallChange="2" Height="14" />
+            <Label Content="滑动块值"/>
+            <TextBox Name="TxtScrollValue" Text="{Binding ElementName=TestScrollBar, Path=Value}"/>
+        </StackPanel>
+
+        <Button Content="更改名字" Click="Button1_Click" Canvas.Left="382" Canvas.Top="286" />
+        <TextBox Text="test" Height="23" HorizontalAlignment="Left" Name="TextBox11" VerticalAlignment="Top" Width="120" Canvas.Left="446" Canvas.Top="286" />
+        <ProgressBar Name="ProgressBar1" IsIndeterminate="True" Height="48" Width="355" Canvas.Left="25" Canvas.Top="325"></ProgressBar>
+        <local:CustomTextBlock  Canvas.Left="25" Canvas.Top="378" Text="{Binding RelativeSource={RelativeSource Self}, Path=Time}" Height="22" Width="176"/>
+    </Canvas>
+</Window>

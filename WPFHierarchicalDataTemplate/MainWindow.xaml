@@ -1,0 +1,78 @@
+﻿<Window x:Class="WPFHierarchicalDataTemplate.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"      
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+        <XmlDataProvider x:Key="Info"  XPath="Nations">
+            <x:XData>
+                <Nations xmlns="">
+                    <Nation Name="中国">
+                        <Provinces>
+                            <Province Name="安徽">
+                                <Citys>
+                                    <City Name="安庆">
+                                        <Countrys>
+                                            <Country Name="潜山"/>
+                                            <Country Name="桐城"/>
+                                        </Countrys>
+                                    </City>
+                                    <City Name="合肥">
+                                        <Countrys>
+                                            <Country Name="长丰"/>
+                                            <Country Name="肥东"/>
+                                        </Countrys>
+                                    </City>
+                                </Citys>
+                            </Province>
+                            <Province Name="江苏">
+                                <Citys>
+                                    <City Name="南京">
+                                        <Countrys>
+                                            <Country Name="溧水"/>
+                                            <Country Name="高淳"/>
+                                        </Countrys>
+                                    </City>
+                                    <City Name="苏州">
+                                        <Countrys>
+                                            <Country Name="常熟"/>
+                                        </Countrys>
+                                    </City>
+                                </Citys>
+                            </Province>
+                        </Provinces>
+                    </Nation>
+                </Nations>
+            </x:XData>
+        </XmlDataProvider>
+        <HierarchicalDataTemplate DataType="Nation" ItemsSource="{Binding XPath=Provinces/Province}">
+            <StackPanel Background="AliceBlue">
+                <TextBlock FontSize="18" Text="{Binding XPath=@Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="Province" ItemsSource="{Binding XPath=Citys/City}">
+            <StackPanel Background="AliceBlue">
+                <TextBlock FontSize="18" Text="{Binding XPath=@Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="City" ItemsSource="{Binding XPath=Countrys/Country}">
+
+            <StackPanel Background="LightBlue">
+
+                <TextBlock FontSize="18" Text="{Binding XPath=@Name}"/>
+
+            </StackPanel>
+
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="Country">
+            <StackPanel Background="LightSalmon">
+                <TextBlock FontSize="18" Text="{Binding XPath=@Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+   <Grid>
+        <TreeView ItemsSource="{Binding Source={StaticResource ResourceKey=Info},XPath=Nation}"></TreeView>
+
+    </Grid>
+        
+</Window>

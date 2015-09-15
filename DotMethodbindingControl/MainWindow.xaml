@@ -1,0 +1,29 @@
+﻿<Window x:Class="DotMethodbindingControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DotMethodbindingControl"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+        <local:Student x:Key="MyStudent"/>
+        <ObjectDataProvider x:Key="Test" ObjectType="{x:Type local:Student}" MethodName="GetName"  />
+    </Window.Resources>
+    <Grid>
+        <TextBlock Text="{Binding Source={StaticResource Test}, Mode=OneWay}" Margin="20,10,391,271"/>
+        <TextBlock Height="22" HorizontalAlignment="Left" Margin="20,71,0,0" Name="TextBlock1" Text="姓名" VerticalAlignment="Top" Width="64" />
+        <TextBox DataContext="{StaticResource MyStudent}"  HorizontalAlignment="Left" Margin="119,71,0,0" Name="TextBox1" VerticalAlignment="Top" Width="120">
+            <TextBox.Text>
+                <Binding Path="Name"  UpdateSourceTrigger="PropertyChanged">
+                   <Binding.ValidationRules>
+                        <local:Namecheck/>
+                   </Binding.ValidationRules> 
+                </Binding>
+            </TextBox.Text>
+            
+            <TextBox.ToolTip>
+                <Binding RelativeSource="{RelativeSource Self}"  Path="(Validation.Errors)[0].ErrorContent"/>
+            </TextBox.ToolTip>
+        </TextBox>
+
+    </Grid>
+</Window>
