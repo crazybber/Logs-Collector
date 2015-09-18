@@ -1,8 +1,11 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ICSharpCode.SharpZipLib;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace LogsCollections.EC
 {
@@ -14,35 +17,80 @@ namespace LogsCollections.EC
         public MainWindow()
         {
             InitializeComponent();
+            InitSystemInfo();
         }
 
+        private void InitSystemInfo()
+        {
+            //get All the needed system information.
+            if (Environment.Is64BitOperatingSystem)
+            {
+                _husInstalledDir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                this.SytemInfo.Content += " Current OS 64bit";
+            }
+            else
+            {
+                _husInstalledDir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                this.SytemInfo.Content += "Current OS 32bit";
+            }
 
+
+            //throw new System.NotImplementedException();
+        }
+
+        private string _husInstalledDir;
         //Checkbox and their status
-        private readonly Dictionary<string, Status> _chechboxStatusDic = new Dictionary<string, Status>();
+        private readonly Dictionary<LogType, LogItemInfo> _cbLogTypeItemInfoDic = new Dictionary<LogType, LogItemInfo>();
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            var name = (CheckBox)sender;
-            var keyname = name.Content.ToString();
-            _chechboxStatusDic[keyname] = Status.IsChecked;
+            var logtype = (LogType)((CheckBox)sender).Tag;
+
+            if (!_cbLogTypeItemInfoDic.ContainsKey(logtype))
+            {
+                _cbLogTypeItemInfoDic[logtype] = new LogItemInfo
+                {
+                    LogTypeName = logtype,
+                    LogItemStatus = Status.IsChecked
+                };
+            }
+            _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsChecked;
+
+            if (logtype.Equals(LogType.LogAll))
+            {
+                CheckAllUnCheckedBox();
+            }
+
+
+        }
+
+        private void CheckAllUnCheckedBox()
+        {
+            if (CheckBoxWrapPanel.Children.Count <= 0) return;
+            foreach (var item in CheckBoxWrapPanel.Children.Cast<object>()
+                .Select(child => child as CheckBox).
+                Where(item => item != null && item.IsChecked != null && (bool)!item.IsChecked))
+            {
+                item.IsChecked = true;
+            }
+            // throw new System.NotImplementedException();
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            var name = (CheckBox)sender;
-            var keyname = name.Content.ToString();
-            if (_chechboxStatusDic.ContainsKey(keyname))
+
+            var logtype = (LogType)((CheckBox)sender).Tag;
+            if (_cbLogTypeItemInfoDic.ContainsKey(logtype))
             {
-                _chechboxStatusDic[keyname] = Status.IsUnChecked;
+                _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsUnChecked;
             }
 
         }
 
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (_chechboxStatusDic.Count == 0)
+            if (_cbLogTypeItemInfoDic.Count == 0)
             {
                 MessageBox.Show("木有勾选任何东西，你得瑟个啥！");
                 return;
@@ -54,34 +102,77 @@ namespace LogsCollections.EC
 
         private void Start2CollectAllLogs()
         {
-            _chechboxStatusDic.ToList().ForEach(item =>
+            _cbLogTypeItemInfoDic.ToList().ForEach(item =>
             {
-                if (item.Value == Status.IsChecked)
+                if (item.Value.LogItemStatus == Status.IsChecked)
                 {
-                    StartToCollectLog(item.Key);
+                    StartToCollectLog(item.Value);
                 }
             });
         }
 
-        private void StartToCollectLog(string logCatagoryName)
+        private void StartToCollectLog(LogItemInfo itemInfo)
         {
-            var fullpath = GetfullPathbyCataGory(logCatagoryName);
 
+            //  var fullpath = GetfullPathbyCataGory(itemInfo);
+            if (itemInfo.LogItemPaths == null)
+            {
+                var pathListSets = GetlogPathByType(itemInfo.LogTypeName);
+                itemInfo.LogItemPaths = pathListSets;
+            }
 
+            if (itemInfo.LogItemPaths.Count <= 0) return;
+            var fastzip = new FastZip();
+            itemInfo.LogItemPaths.ToList().ForEach(dirpath =>
+            {
+                CollectFilesAndZipThem(dirpath);
+                UpdateProgressBar();
+            });
             //throw new System.NotImplementedException();
+
         }
+        
 
 
-        private object GetfullPathbyCataGory(string logCatagoryName)
+        private void CollectFilesAndZipThem(string dirpath)
         {
-            throw new System.NotImplementedException();
-        }
-    }
+            var fastzip = new FastZip();
+            fastzip.CreateZip("test.zip", dirpath, false, null);
 
-    public enum Status
-    {
-        IsChecked,
-        IsUnChecked
+            //throw new NotImplementedException();
+        }
+
+        private ICollection<string> GetlogPathByType(LogType logTypeName)
+        {
+
+            var resultset = new HashSet<string>();
+            switch (logTypeName)
+            {
+                case LogType.LogEc:
+                    var ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\ecserverlog\";
+                    resultset.Add(ecdirPath);
+                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\log\";
+                    resultset.Add(ecdirPath);
+                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\TempLogs\";
+                    resultset.Add(ecdirPath);
+                    break;
+                case LogType.LogAdapter:
+                    break;
+                case LogType.LogSandBox:
+                    break;
+                case LogType.LogSysEven:
+                    break;
+            }
+
+            return resultset;
+            //throw new NotImplementedException();
+        }
+
+        private void UpdateProgressBar()
+        {
+
+        }
+
     }
 
 
