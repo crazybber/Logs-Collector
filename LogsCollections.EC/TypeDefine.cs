@@ -11,6 +11,7 @@ namespace LogsCollections.EC
 
     public class LogItemInfo
     {
+        public int CollecetdItemIndex { get; set; }
         public string LogItemName { get; set; }
         public Status LogItemStatus { get; set; }
 

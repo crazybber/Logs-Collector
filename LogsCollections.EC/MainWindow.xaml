@@ -18,7 +18,7 @@
         </GroupBox>
         <StackPanel Margin="76,235,71,83" Orientation="Vertical">
             <Label Content="Collection Status: 0%" HorizontalAlignment="Center" Margin="164,0,175,0" VerticalAlignment="Center" Height="29" Width="145" FontSize="14"/>
-            <ProgressBar HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" Width="439" Margin="28,0,44,0"/>
+            <ProgressBar Name="ProgressBar1" HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" Width="491" Margin="10,0"/>
         </StackPanel>
         <Button Content="Collect !" HorizontalAlignment="Left" Margin="492,317,0,0" VerticalAlignment="Top" Width="130" Height="37" FontSize="14" Click="Button_Click"/>
 

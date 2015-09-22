@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="WapperEventArgs.cs" />
+    <Compile Include="FileCollectionMgr.cs" />
+    <Compile Include="SingletonProvider.cs" />
     <Compile Include="TypeDefine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

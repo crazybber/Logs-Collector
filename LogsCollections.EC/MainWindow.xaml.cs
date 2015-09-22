@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ICSharpCode.SharpZipLib;
-using ICSharpCode.SharpZipLib.Zip;
+using System.Windows.Threading;
+
 
 namespace LogsCollections.EC
 {
@@ -14,24 +14,34 @@ namespace LogsCollections.EC
     /// </summary>
     public partial class MainWindow
     {
+
+        private double _averageStepwidth;
+
+
         public MainWindow()
         {
+
             InitializeComponent();
             InitSystemInfo();
+            SetProcessBarInfo();
         }
 
+        private void SetProcessBarInfo()
+        {
+            _averageStepwidth = (ProgressBar1.Maximum - ProgressBar1.Minimum) / ProgressBar1.Width;
+        }
         private void InitSystemInfo()
         {
             //get All the needed system information.
             if (Environment.Is64BitOperatingSystem)
             {
                 _husInstalledDir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-                this.SytemInfo.Content += " Current OS 64bit";
+                SytemInfo.Content += " Current OS 64bit";
             }
             else
             {
                 _husInstalledDir = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-                this.SytemInfo.Content += "Current OS 32bit";
+                SytemInfo.Content += "Current OS 32bit";
             }
 
 
@@ -45,11 +55,11 @@ namespace LogsCollections.EC
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var logtype = (LogType)((CheckBox)sender).Tag;
-
             if (!_cbLogTypeItemInfoDic.ContainsKey(logtype))
             {
                 _cbLogTypeItemInfoDic[logtype] = new LogItemInfo
                 {
+                    CollecetdItemIndex = -1,
                     LogTypeName = logtype,
                     LogItemStatus = Status.IsChecked
                 };
@@ -64,6 +74,16 @@ namespace LogsCollections.EC
 
         }
 
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+            var logtype = (LogType)((CheckBox)sender).Tag;
+            if (!_cbLogTypeItemInfoDic.ContainsKey(logtype)) return;
+            _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsUnChecked;
+            // _cbLogTypeItemInfoDic.Remove(logtype); //Remove element
+        }
+
         private void CheckAllUnCheckedBox()
         {
             if (CheckBoxWrapPanel.Children.Count <= 0) return;
@@ -74,17 +94,6 @@ namespace LogsCollections.EC
                 item.IsChecked = true;
             }
             // throw new System.NotImplementedException();
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-            var logtype = (LogType)((CheckBox)sender).Tag;
-            if (_cbLogTypeItemInfoDic.ContainsKey(logtype))
-            {
-                _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsUnChecked;
-            }
-
         }
 
 
@@ -102,45 +111,43 @@ namespace LogsCollections.EC
 
         private void Start2CollectAllLogs()
         {
-            _cbLogTypeItemInfoDic.ToList().ForEach(item =>
+            var dicEntryList = _cbLogTypeItemInfoDic.Where(item => item.Value.LogItemStatus == Status.IsChecked).ToList();
+
+            dicEntryList.ForEach(item =>
             {
-                if (item.Value.LogItemStatus == Status.IsChecked)
-                {
-                    StartToCollectLog(item.Value);
-                }
+                if (item.Value.LogItemStatus != Status.IsChecked) return;
+              
+                StartToCollectLog(new WapperEventArgs(item.Value));
             });
         }
 
-        private void StartToCollectLog(LogItemInfo itemInfo)
+
+        private void StartToCollectLog(WapperEventArgs eventArgs)
         {
 
+            var itemInfo = eventArgs.logitemInfo;
             //  var fullpath = GetfullPathbyCataGory(itemInfo);
             if (itemInfo.LogItemPaths == null)
             {
                 var pathListSets = GetlogPathByType(itemInfo.LogTypeName);
                 itemInfo.LogItemPaths = pathListSets;
             }
-
             if (itemInfo.LogItemPaths.Count <= 0) return;
-            var fastzip = new FastZip();
-            itemInfo.LogItemPaths.ToList().ForEach(dirpath =>
-            {
-                CollectFilesAndZipThem(dirpath);
-                UpdateProgressBar();
-            });
+
+
+            var dicEntry = itemInfo.LogItemPaths.ToList();
+
+            dicEntry.ForEach(dirpath =>
+             {
+                 FileCollectionMgr.CollectFilesAndZipThem(dirpath);
+                 //
+
+                 UpdateProgressBar();
+             });
             //throw new System.NotImplementedException();
 
         }
-        
 
-
-        private void CollectFilesAndZipThem(string dirpath)
-        {
-            var fastzip = new FastZip();
-            fastzip.CreateZip("test.zip", dirpath, false, null);
-
-            //throw new NotImplementedException();
-        }
 
         private ICollection<string> GetlogPathByType(LogType logTypeName)
         {
@@ -171,6 +178,11 @@ namespace LogsCollections.EC
         private void UpdateProgressBar()
         {
 
+            ProgressBar1.Dispatcher.Invoke(() =>
+            {
+                ProgressBar1.Value += 1;
+
+            }, DispatcherPriority.Normal);
         }
 
     }
