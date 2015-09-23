@@ -4,14 +4,14 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace LogsCollections.EC
 {
-    class FileCollectionMgr : ContextBoundObject
+    class FileCollectZipMgr : ContextBoundObject
     {
 
-        private static readonly FileCollectionMgr Instance = SingletonProvider<FileCollectionMgr>.GetInstance();
+        private static readonly FileCollectZipMgr Instance = SingletonProvider<FileCollectZipMgr>.GetInstance();
         private static readonly FastZip FastZiper = new FastZip();
 
 
-        public static FileCollectionMgr GetInstance()
+        public static FileCollectZipMgr GetInstance()
         {
             return Instance;
         }

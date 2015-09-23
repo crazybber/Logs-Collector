@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -15,21 +16,13 @@ namespace LogsCollections.EC
     public partial class MainWindow
     {
 
-        private double _averageStepwidth;
-
-
         public MainWindow()
         {
-
             InitializeComponent();
             InitSystemInfo();
-            SetProcessBarInfo();
         }
 
-        private void SetProcessBarInfo()
-        {
-            _averageStepwidth = (ProgressBar1.Maximum - ProgressBar1.Minimum) / ProgressBar1.Width;
-        }
+        public string _husInstalledDir { get; set; }
         private void InitSystemInfo()
         {
             //get All the needed system information.
@@ -48,9 +41,12 @@ namespace LogsCollections.EC
             //throw new System.NotImplementedException();
         }
 
-        private string _husInstalledDir;
+
         //Checkbox and their status
         private readonly Dictionary<LogType, LogItemInfo> _cbLogTypeItemInfoDic = new Dictionary<LogType, LogItemInfo>();
+
+        private double _allpathCount;
+        private double _currentLogPathsIndex;
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -61,7 +57,9 @@ namespace LogsCollections.EC
                 {
                     CollecetdItemIndex = -1,
                     LogTypeName = logtype,
+                    LogItemPaths = LogPathSetsMgr.GetInstance().GetlogPathByType(logtype),
                     LogItemStatus = Status.IsChecked
+
                 };
             }
             _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsChecked;
@@ -104,89 +102,114 @@ namespace LogsCollections.EC
                 MessageBox.Show("木有勾选任何东西，你得瑟个啥！");
                 return;
             }
-            Start2CollectAllLogs();
+
+            CollectAllLogItems();
 
             //throw new Exception("我就害你，我就抛异常!");
         }
 
-        private void Start2CollectAllLogs()
+
+
+
+        private void CollectAllLogItems()
         {
-            var dicEntryList = _cbLogTypeItemInfoDic.Where(item => item.Value.LogItemStatus == Status.IsChecked).ToList();
+            var dicEntryList = _cbLogTypeItemInfoDic
+                                .Where(item => item.Value.LogItemStatus == Status.IsChecked)
+                                .ToList();
+            _allpathCount = CheckingLogCSetting(dicEntryList);
+
+            var averageStep = ProgressBar1.Width / (ProgressBar1.Maximum - ProgressBar1.Minimum);
 
             dicEntryList.ForEach(item =>
             {
-                if (item.Value.LogItemStatus != Status.IsChecked) return;
-              
-                StartToCollectLog(new WapperEventArgs(item.Value));
+                CollectLogItem(new LogItemEventArgs(item.Value, averageStep));
             });
         }
 
-
-        private void StartToCollectLog(WapperEventArgs eventArgs)
+        private int CheckingLogCSetting(List<KeyValuePair<LogType, LogItemInfo>> dicEntryList)
         {
+            var itemIndex = 0;
+            var pathCount = 0;
+            dicEntryList.ForEach(item =>
+            {
+                if (item.Value.LogItemStatus != Status.IsChecked) return;
+                item.Value.CollecetdItemIndex = itemIndex++; //Save index order
+                if (item.Value.LogItemPaths.Count <= 0)
+                {
+                    throw new ArgumentException(item.Key + ":LogItemPaths Count:0");
+                }
+                pathCount += item.Value.LogItemPaths.Count;
 
-            var itemInfo = eventArgs.logitemInfo;
+            });
+
+            return pathCount;
+            // throw new NotImplementedException();
+        }
+
+
+
+        private void CollectLogItem(LogItemEventArgs eventArgs)
+        {
+            if (eventArgs == null) throw new ArgumentNullException("LogItemEventArgs:" + "eventArgs");
+
+            var itemInfo = eventArgs.LogItemInfo;
+            var averageStep = eventArgs.AverStepWidth;
+
+
             //  var fullpath = GetfullPathbyCataGory(itemInfo);
             if (itemInfo.LogItemPaths == null)
             {
-                var pathListSets = GetlogPathByType(itemInfo.LogTypeName);
+                var pathListSets = LogPathSetsMgr.GetInstance(_husInstalledDir).GetlogPathByType(itemInfo.LogTypeName);
                 itemInfo.LogItemPaths = pathListSets;
             }
             if (itemInfo.LogItemPaths.Count <= 0) return;
 
+            var pathEntryItems = itemInfo.LogItemPaths;
+            var index = 0;
+            var pathCount = pathEntryItems.Count;
+            var innerStepWidth = averageStep / pathCount;
 
-            var dicEntry = itemInfo.LogItemPaths.ToList();
-
-            dicEntry.ForEach(dirpath =>
+            pathEntryItems.ToList().ForEach(dirpath =>
              {
-                 FileCollectionMgr.CollectFilesAndZipThem(dirpath);
+                 //   FileCollectZipMgr.CollectFilesAndZipThem(dirpath);
+                 Thread.Sleep(500);
                  //
-
-                 UpdateProgressBar();
+                 _currentLogPathsIndex++;
+                 UpdateProgressBar(new ProcessBarEventArgs
+                 {
+                     LogItemInfo = itemInfo,
+                     AverStepWidth = averageStep,
+                     InnerAverStepWidth = innerStepWidth,
+                     CurrentInnerIndex = index++
+                 });
              });
             //throw new System.NotImplementedException();
 
         }
 
 
-        private ICollection<string> GetlogPathByType(LogType logTypeName)
+
+
+        private void UpdateProgressBar(ProcessBarEventArgs eventArgs)
         {
+            if (eventArgs == null) throw new ArgumentNullException("ProcessBarEventArgs:" + "eventArgs");
+            var averageStep = eventArgs.AverStepWidth;
+            var stepIndex = eventArgs.LogItemInfo.CollecetdItemIndex;
+            var innerIndex = eventArgs.CurrentInnerIndex;
+            var innerStepWidth = eventArgs.InnerAverStepWidth;
 
-            var resultset = new HashSet<string>();
-            switch (logTypeName)
-            {
-                case LogType.LogEc:
-                    var ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\ecserverlog\";
-                    resultset.Add(ecdirPath);
-                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\log\";
-                    resultset.Add(ecdirPath);
-                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\TempLogs\";
-                    resultset.Add(ecdirPath);
-                    break;
-                case LogType.LogAdapter:
-                    break;
-                case LogType.LogSandBox:
-                    break;
-                case LogType.LogSysEven:
-                    break;
-            }
-
-            return resultset;
-            //throw new NotImplementedException();
-        }
-
-        private void UpdateProgressBar()
-        {
 
             ProgressBar1.Dispatcher.Invoke(() =>
             {
-                ProgressBar1.Value += 1;
+                ProgressBar1.Value = ProgressBar1.Value + stepIndex * averageStep + innerIndex * innerStepWidth;
+
+                var percent = _currentLogPathsIndex / _allpathCount * 100;
+
+                if (percent > 99.99999) percent = 100;
+
+                ProgressLabel.Text = "Collection Status: " + percent + "%";
 
             }, DispatcherPriority.Normal);
         }
-
     }
-
-
-
 }

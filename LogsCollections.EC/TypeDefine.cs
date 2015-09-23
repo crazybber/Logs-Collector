@@ -54,7 +54,7 @@ namespace LogsCollections.EC
         LogEc,
         LogSandBox,
         LogAdapter,
-        LogSysEven,
+        LogSysEvent,
         LogAll
     }
 }

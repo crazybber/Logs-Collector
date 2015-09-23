@@ -11,13 +11,13 @@
                     <CheckBox  Content="EC Logs" Tag="{x:Static local:LogType.LogEc}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="128" FontSize="14" Checked="CheckBox_Checked"  Unchecked="CheckBox_Unchecked" />
                     <CheckBox Content="Sandbox Logs"  Tag="{x:Static local:LogType.LogSandBox}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.145,0.826" FontSize="14" Height="25" Width="126" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
                     <CheckBox Content="Adapter Logs" Tag="{x:Static local:LogType.LogAdapter}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.145,0.826" FontSize="14" Width="162" Height="27" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                    <CheckBox Content="System Event Logs" Tag="{x:Static local:LogType.LogSysEven}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="143" FontSize="14" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                    <CheckBox Content="System Event Logs" Tag="{x:Static local:LogType.LogSysEvent}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="143" FontSize="14" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
                 </WrapPanel>
                 <CheckBox Content="Select All" Tag="{x:Static local:LogType.LogAll}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="0,0,31,22" Width="102" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
             </Grid>
         </GroupBox>
         <StackPanel Margin="76,235,71,83" Orientation="Vertical">
-            <Label Content="Collection Status: 0%" HorizontalAlignment="Center" Margin="164,0,175,0" VerticalAlignment="Center" Height="29" Width="145" FontSize="14"/>
+            <TextBlock Name="ProgressLabel"  Text="Collection Status: 0%" HorizontalAlignment="Center" Margin="164,0,175,0" VerticalAlignment="Center" Height="29" FontSize="14"/>
             <ProgressBar Name="ProgressBar1" HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" Width="491" Margin="10,0"/>
         </StackPanel>
         <Button Content="Collect !" HorizontalAlignment="Left" Margin="492,317,0,0" VerticalAlignment="Top" Width="130" Height="37" FontSize="14" Click="Button_Click"/>

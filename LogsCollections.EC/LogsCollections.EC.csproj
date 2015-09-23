@@ -56,8 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="WapperEventArgs.cs" />
-    <Compile Include="FileCollectionMgr.cs" />
+    <Compile Include="LogItemEventArgs.cs" />
+    <Compile Include="FileCollectZipMgr.cs" />
+    <Compile Include="LogPathSetsMgr.cs" />
+    <Compile Include="ProcessBarEventArgs.cs" />
     <Compile Include="SingletonProvider.cs" />
     <Compile Include="TypeDefine.cs" />
     <Page Include="MainWindow.xaml">
@@ -99,6 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WPFControl\WPFControl.csproj">
+      <Project>{F89E0F82-B444-4680-A363-3405F9A78DFF}</Project>
+      <Name>WPFControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
