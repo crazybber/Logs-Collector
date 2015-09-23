@@ -13,15 +13,12 @@ namespace ExportEvenLogs
         static void Main(string[] args)
         {
             //  var evenMgr = 
-            var evtLog = new EventLog("Application") { MachineName = "." }; // Event Log type
-            // dot is local machine
-            
-            foreach (EventLogEntry evtEntry in evtLog.Entries)
-            {
-                Console.WriteLine(evtEntry.Message);
-            }
 
-            evtLog.Close();
+            var src = ExportEventLog2File.getLogSource();
+
+            var text = ExportEventLog2File.ReadEventLog(src);
+
+            ExportEventLog2File.Write2File("c:\\", text);
 
 
 
