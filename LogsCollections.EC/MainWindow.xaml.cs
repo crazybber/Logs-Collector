@@ -45,8 +45,7 @@ namespace LogsCollections.EC
         //Checkbox and their status
         private readonly Dictionary<LogType, LogItemInfo> _cbLogTypeItemInfoDic = new Dictionary<LogType, LogItemInfo>();
 
-        private double _allpathCount;
-        private double _currentLogPathsIndex;
+
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -114,11 +113,11 @@ namespace LogsCollections.EC
         private void CollectAllLogItems()
         {
             var dicEntryList = _cbLogTypeItemInfoDic
-                                .Where(item => item.Value.LogItemStatus == Status.IsChecked)
+                                .Where(item => item.Value.LogItemStatus == Status.IsChecked && item.Value.LogItemPaths != null && item.Value.LogItemPaths.Count > 0)
                                 .ToList();
-            _allpathCount = CheckingLogCSetting(dicEntryList);
+           CheckingLogCSetting(dicEntryList);
 
-            var averageStep = ProgressBar1.Width / (ProgressBar1.Maximum - ProgressBar1.Minimum);
+            var averageStep = (ProgressBar1.Maximum - ProgressBar1.Minimum) / dicEntryList.Count;
 
             dicEntryList.ForEach(item =>
             {
@@ -172,9 +171,7 @@ namespace LogsCollections.EC
             pathEntryItems.ToList().ForEach(dirpath =>
              {
                  //   FileCollectZipMgr.CollectFilesAndZipThem(dirpath);
-                 Thread.Sleep(500);
-                 //
-                 _currentLogPathsIndex++;
+                 Thread.Sleep(800);
                  UpdateProgressBar(new ProcessBarEventArgs
                  {
                      LogItemInfo = itemInfo,
@@ -203,7 +200,7 @@ namespace LogsCollections.EC
             {
                 ProgressBar1.Value = ProgressBar1.Value + stepIndex * averageStep + innerIndex * innerStepWidth;
 
-                var percent = _currentLogPathsIndex / _allpathCount * 100;
+                var percent = ProgressBar1.Value / (ProgressBar1.Maximum - ProgressBar1.Minimum) * 100;
 
                 if (percent > 99.99999) percent = 100;
 
