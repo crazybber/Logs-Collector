@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using LogsCollections.EC.Template;
 
-
-namespace LogsCollections.EC
+namespace LogsCollections.EC.LogTypeManager
 {
-    class LogPathSetsMgr : ContextBoundObject
+    class LogPathSetsMgr : MgrBase
     {
         private static readonly LogPathSetsMgr Instance = SingletonProvider<LogPathSetsMgr>.GetInstance();
 
@@ -29,19 +29,26 @@ namespace LogsCollections.EC
         {
 
             var resultset = new HashSet<string>();
+            string dirPath;
             switch (logTypeName)
             {
                 case LogType.LogEc:
-                    var ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\ecserverlog\";
-                    resultset.Add(ecdirPath);
-                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\log\";
-                    resultset.Add(ecdirPath);
-                    ecdirPath = _husInstalledDir + @"\Honeywell\HUS\EC\TempLogs\";
-                    resultset.Add(ecdirPath);
+                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\ecserverlog\";
+                    resultset.Add(dirPath);
+                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\log\";
+                    resultset.Add(dirPath);
+                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\TempLogs\";
+                    resultset.Add(dirPath);
                     break;
                 case LogType.LogAdapter:
+                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\devices\";
+                    resultset.Add(dirPath);
+                    dirPath = _husInstalledDir + @"\HUS\EC\SandboxFramework\ECLoader\Sandbox\devices\";
+                    resultset.Add(dirPath);
                     break;
                 case LogType.LogSandBox:
+                    dirPath = _husInstalledDir + @"\HUS\EC\SandboxFramework\ECLoader\Sandbox\Logs\";
+                    resultset.Add(dirPath);
                     break;
                 case LogType.LogSysEvent:
 

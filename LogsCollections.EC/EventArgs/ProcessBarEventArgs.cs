@@ -1,4 +1,4 @@
-﻿namespace LogsCollections.EC
+﻿namespace LogsCollections.EC.EventArgs
 {
     internal class ProcessBarEventArgs : LogItemEventArgs
     {

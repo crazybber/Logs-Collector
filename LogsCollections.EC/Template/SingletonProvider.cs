@@ -1,6 +1,6 @@
 ﻿
 
-namespace LogsCollections.EC
+namespace LogsCollections.EC.Template
 {
     internal class SingletonProvider<T> where T : new()
     {

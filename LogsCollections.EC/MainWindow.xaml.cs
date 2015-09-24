@@ -6,6 +6,8 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using LogsCollections.EC.EventArgs;
+using LogsCollections.EC.LogTypeManager;
 
 
 namespace LogsCollections.EC
@@ -115,7 +117,7 @@ namespace LogsCollections.EC
             var dicEntryList = _cbLogTypeItemInfoDic
                                 .Where(item => item.Value.LogItemStatus == Status.IsChecked && item.Value.LogItemPaths != null && item.Value.LogItemPaths.Count > 0)
                                 .ToList();
-           CheckingLogCSetting(dicEntryList);
+            CheckingLogCSetting(dicEntryList);
 
             var averageStep = (ProgressBar1.Maximum - ProgressBar1.Minimum) / dicEntryList.Count;
 
@@ -125,10 +127,10 @@ namespace LogsCollections.EC
             });
         }
 
-        private int CheckingLogCSetting(List<KeyValuePair<LogType, LogItemInfo>> dicEntryList)
+        private void CheckingLogCSetting(List<KeyValuePair<LogType, LogItemInfo>> dicEntryList)
         {
             var itemIndex = 0;
-            var pathCount = 0;
+            //  var pathCount = 0;
             dicEntryList.ForEach(item =>
             {
                 if (item.Value.LogItemStatus != Status.IsChecked) return;
@@ -137,11 +139,11 @@ namespace LogsCollections.EC
                 {
                     throw new ArgumentException(item.Key + ":LogItemPaths Count:0");
                 }
-                pathCount += item.Value.LogItemPaths.Count;
+                // pathCount += item.Value.LogItemPaths.Count;
 
             });
 
-            return pathCount;
+            // return pathCount;
             // throw new NotImplementedException();
         }
 
@@ -162,6 +164,11 @@ namespace LogsCollections.EC
                 itemInfo.LogItemPaths = pathListSets;
             }
             if (itemInfo.LogItemPaths.Count <= 0) return;
+
+            if (itemInfo.LogTypeName == LogType.LogSysEvent)
+            {
+               // SystemEventLogMgr.GetInstance().ExportAppEventLogs();
+            }
 
             var pathEntryItems = itemInfo.LogItemPaths;
             var index = 0;
@@ -206,7 +213,7 @@ namespace LogsCollections.EC
 
                 ProgressLabel.Text = "Collection Status: " + percent + "%";
 
-            }, DispatcherPriority.Normal);
+            }, DispatcherPriority.Background);
         }
     }
 }

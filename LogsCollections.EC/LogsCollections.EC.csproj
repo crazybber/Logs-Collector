@@ -56,11 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LogItemEventArgs.cs" />
-    <Compile Include="FileCollectZipMgr.cs" />
-    <Compile Include="LogPathSetsMgr.cs" />
-    <Compile Include="ProcessBarEventArgs.cs" />
-    <Compile Include="SingletonProvider.cs" />
+    <Compile Include="EventArgs\LogItemEventArgs.cs" />
+    <Compile Include="LogTypeManager\FileCollectZipMgr.cs" />
+    <Compile Include="LogTypeManager\LogPathSetsMgr.cs" />
+    <Compile Include="EventArgs\ProcessBarEventArgs.cs" />
+    <Compile Include="LogTypeManager\MgrBase.cs" />
+    <Compile Include="Template\SingletonProvider.cs" />
+    <Compile Include="LogTypeManager\SystemEventLogMgr.cs" />
     <Compile Include="TypeDefine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -1,8 +1,8 @@
-﻿using System;
+﻿
 
-
-namespace LogsCollections.EC
+namespace LogsCollections.EC.EventArgs
 {
+    using System;
     class LogItemEventArgs : EventArgs
     {
      
