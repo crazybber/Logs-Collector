@@ -57,10 +57,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="EventArgs\LogItemEventArgs.cs" />
+    <Compile Include="LogTypeManager\SandBoxLogMgr.cs" />
     <Compile Include="LogTypeManager\FileCollectZipMgr.cs" />
     <Compile Include="LogTypeManager\LogPathSetsMgr.cs" />
     <Compile Include="EventArgs\ProcessBarEventArgs.cs" />
-    <Compile Include="LogTypeManager\MgrBase.cs" />
+    <Compile Include="LogTypeManager\FilesMgrBase.cs" />
+    <Compile Include="Template\IFilesOperate.cs" />
     <Compile Include="Template\SingletonProvider.cs" />
     <Compile Include="LogTypeManager\SystemEventLogMgr.cs" />
     <Compile Include="TypeDefine.cs" />

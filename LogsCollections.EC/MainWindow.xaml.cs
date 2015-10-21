@@ -165,10 +165,25 @@ namespace LogsCollections.EC
             }
             if (itemInfo.LogItemPaths.Count <= 0) return;
 
-            if (itemInfo.LogTypeName == LogType.LogSysEvent)
+            switch (itemInfo.LogTypeName)
             {
-               // SystemEventLogMgr.GetInstance().ExportAppEventLogs();
+                case LogType.LogSysEvent:
+                    // SystemEventLogMgr.GetInstance().ExportAppEventLogs();
+                    break;
+                case LogType.LogSandBox:
+                    SandBoxLogMgr.GetInstance().CollectLogsFiles(itemInfo);
+
+                    break;
+                case LogType.LogEc:
+                    break;
+                case LogType.LogAdapter:
+                    break;
+                case LogType.LogAll:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
 
             var pathEntryItems = itemInfo.LogItemPaths;
             var index = 0;
@@ -176,22 +191,21 @@ namespace LogsCollections.EC
             var innerStepWidth = averageStep / pathCount;
 
             pathEntryItems.ToList().ForEach(dirpath =>
-             {
-                 //   FileCollectZipMgr.CollectFilesAndZipThem(dirpath);
-                 Thread.Sleep(800);
-                 UpdateProgressBar(new ProcessBarEventArgs
-                 {
-                     LogItemInfo = itemInfo,
-                     AverStepWidth = averageStep,
-                     InnerAverStepWidth = innerStepWidth,
-                     CurrentInnerIndex = index++
-                 });
-             });
+            {
+                //   FileCollectZipMgr.CollectFilesAndZipThem(dirpath);
+
+
+                Thread.Sleep(800);
+                UpdateProgressBar(new ProcessBarEventArgs
+                {
+                    LogItemInfo = itemInfo,
+                    AverStepWidth = averageStep,
+                    InnerAverStepWidth = innerStepWidth,
+                    CurrentInnerIndex = index++
+                });
+            });
             //throw new System.NotImplementedException();
-
         }
-
-
 
 
         private void UpdateProgressBar(ProcessBarEventArgs eventArgs)
@@ -212,7 +226,6 @@ namespace LogsCollections.EC
                 if (percent > 99.99999) percent = 100;
 
                 ProgressLabel.Text = "Collection Status: " + percent + "%";
-
             }, DispatcherPriority.Background);
         }
     }

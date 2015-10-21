@@ -11,7 +11,7 @@ namespace LogsCollections.EC.LogTypeManager
     using Template;
 
 
-    class SystemEventLogMgr : MgrBase
+    class SystemEventLogMgr : FilesMgrBase
     {
 
         private static readonly SystemEventLogMgr Instance = SingletonProvider<SystemEventLogMgr>.GetInstance();

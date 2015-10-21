@@ -1,5 +1,7 @@
 ﻿
 
+using System.Collections.Generic;
+
 namespace LogsCollections.EC.LogTypeManager
 {
 
@@ -8,7 +10,7 @@ namespace LogsCollections.EC.LogTypeManager
 
     using ICSharpCode.SharpZipLib.Zip;
 
-    class FileCollectZipMgr : MgrBase
+    class FileCollectZipMgr : FilesMgrBase
     {
 
         private static readonly FileCollectZipMgr Instance = SingletonProvider<FileCollectZipMgr>.GetInstance();
@@ -27,5 +29,11 @@ namespace LogsCollections.EC.LogTypeManager
 
             //throw new NotImplementedException();
         }
+
+        public ICollection<string> FindLogFiles()
+        {
+            
+        }
+
     }
 }

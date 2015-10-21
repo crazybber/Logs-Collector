@@ -4,7 +4,7 @@ using LogsCollections.EC.Template;
 
 namespace LogsCollections.EC.LogTypeManager
 {
-    class LogPathSetsMgr : MgrBase
+    class LogPathSetsMgr : FilesMgrBase
     {
         private static readonly LogPathSetsMgr Instance = SingletonProvider<LogPathSetsMgr>.GetInstance();
 
