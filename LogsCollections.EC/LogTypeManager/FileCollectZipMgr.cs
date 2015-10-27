@@ -30,10 +30,10 @@ namespace LogsCollections.EC.LogTypeManager
             //throw new NotImplementedException();
         }
 
-        public ICollection<string> FindLogFiles()
-        {
+        //public ICollection<string> FindLogFiles()
+        //{
             
-        }
+        //}
 
     }
 }

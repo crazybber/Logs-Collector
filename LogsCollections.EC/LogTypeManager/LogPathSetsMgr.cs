@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using LogsCollections.EC.Template;
 
 namespace LogsCollections.EC.LogTypeManager
 {
-    class LogPathSetsMgr : FilesMgrBase
+    public class LogPathSetsMgr : FilesMgrBase
     {
         private static readonly LogPathSetsMgr Instance = SingletonProvider<LogPathSetsMgr>.GetInstance();
 
@@ -33,21 +34,21 @@ namespace LogsCollections.EC.LogTypeManager
             switch (logTypeName)
             {
                 case LogType.LogEc:
-                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\ecserverlog\";
+                    dirPath = Path.Combine(_husInstalledDir, @"Honeywell\HUS\EC\ecserverlog\");
                     resultset.Add(dirPath);
-                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\log\";
+                    dirPath = Path.Combine(_husInstalledDir, @"Honeywell\HUS\EC\log\");
                     resultset.Add(dirPath);
-                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\TempLogs\";
+                    dirPath = Path.Combine(_husInstalledDir, @"Honeywell\HUS\EC\TempLogs\");
                     resultset.Add(dirPath);
                     break;
                 case LogType.LogAdapter:
-                    dirPath = _husInstalledDir + @"\Honeywell\HUS\EC\devices\";
+                    dirPath = Path.Combine(_husInstalledDir, @"Honeywell\HUS\EC\devices\");
                     resultset.Add(dirPath);
-                    dirPath = _husInstalledDir + @"\HUS\EC\SandboxFramework\ECLoader\Sandbox\devices\";
+                    dirPath = Path.Combine(_husInstalledDir, @"HUS\EC\SandboxFramework\ECLoader\Sandbox\devices\");
                     resultset.Add(dirPath);
                     break;
                 case LogType.LogSandBox:
-                    dirPath = _husInstalledDir + @"\HUS\EC\SandboxFramework\ECLoader\Sandbox\Logs\";
+                    dirPath = Path.Combine(_husInstalledDir, @"HUS\EC\SandboxFramework\ECLoader\Sandbox\Logs\");
                     resultset.Add(dirPath);
                     break;
                 case LogType.LogSysEvent:

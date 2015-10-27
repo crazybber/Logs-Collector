@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFProcessBar", "WPFProcess
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportEvenLogs", "ExportEvenLogs\ExportEvenLogs.csproj", "{DB57F98A-EE54-4825-800C-6E152FB32161}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{C652F2CC-13A0-41C6-AEC5-FA4B0585C827}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{DB57F98A-EE54-4825-800C-6E152FB32161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB57F98A-EE54-4825-800C-6E152FB32161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB57F98A-EE54-4825-800C-6E152FB32161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C652F2CC-13A0-41C6-AEC5-FA4B0585C827}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C652F2CC-13A0-41C6-AEC5-FA4B0585C827}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C652F2CC-13A0-41C6-AEC5-FA4B0585C827}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C652F2CC-13A0-41C6-AEC5-FA4B0585C827}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
