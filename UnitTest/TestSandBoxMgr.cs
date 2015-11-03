@@ -25,6 +25,7 @@ namespace UnitTest
             _sabdBoxLogMgr.CollectLogsFiles(parameter);
 
 
+           
         }
 
         [TestMethod]
@@ -54,7 +55,7 @@ namespace UnitTest
 
             var ret = filelist.ToList();
 
-            Assert.AreEqual(ret, 0);
+            Assert.AreEqual(0, ret.Count);
         }
 
         [TestMethod]

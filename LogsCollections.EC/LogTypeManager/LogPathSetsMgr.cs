@@ -43,12 +43,12 @@ namespace LogsCollections.EC.LogTypeManager
                     break;
                 case LogType.LogAdapter:
                     dirPath = Path.Combine(_husInstalledDir, @"Honeywell\HUS\EC\devices\");
-                    resultset.Add(dirPath);
-                    dirPath = Path.Combine(_husInstalledDir, @"HUS\EC\SandboxFramework\ECLoader\Sandbox\devices\");
-                    resultset.Add(dirPath);
+                    resultset.Add(dirPath); 
                     break;
                 case LogType.LogSandBox:
                     dirPath = Path.Combine(_husInstalledDir, @"HUS\EC\SandboxFramework\ECLoader\Sandbox\Logs\");
+                    resultset.Add(dirPath);
+                    dirPath = Path.Combine(_husInstalledDir, @"HUS\EC\SandboxFramework\ECLoader\Sandbox\devices\");
                     resultset.Add(dirPath);
                     break;
                 case LogType.LogSysEvent:
