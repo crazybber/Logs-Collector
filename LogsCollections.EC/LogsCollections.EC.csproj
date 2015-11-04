@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="EventArgs\LogItemEventArgs.cs" />
     <Compile Include="LogTypeManager\AdapterLogMgr.cs" />
+    <Compile Include="LogTypeManager\ECLocalLogMgr.cs" />
     <Compile Include="LogTypeManager\SandBoxLogMgr.cs" />
     <Compile Include="LogTypeManager\FileCollectZipMgr.cs" />
     <Compile Include="LogTypeManager\LogPathSetsMgr.cs" />
@@ -97,6 +98,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

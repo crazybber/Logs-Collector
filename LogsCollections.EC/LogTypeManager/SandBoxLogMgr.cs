@@ -9,9 +9,7 @@ namespace LogsCollections.EC.LogTypeManager
     {
         private static readonly SandBoxLogMgr Instance = SingletonProvider<SandBoxLogMgr>.GetInstance();
         //@"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(|txt|log|\d{1,3}))?$";
-        protected const string Pattern1 = @"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(";
-
-        protected const string Pattern2 = @"\d{1,3}))?$";
+        
 
         public static  SandBoxLogMgr GetInstance()
         {
@@ -42,7 +40,7 @@ namespace LogsCollections.EC.LogTypeManager
 
             // STEP 3 zip them 
 
-            FileCollectZipMgr.CollectFilesAndZipThem(curLogTypeDir);
+            FileCollectZipMgr.Current.zipdir(curLogTypeDir);
 
             //step 4 delete
 
