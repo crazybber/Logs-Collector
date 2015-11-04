@@ -168,7 +168,7 @@ namespace LogsCollections.EC
             switch (itemInfo.LogTypeName)
             {
                 case LogType.LogSysEvent:
-                    // SystemEventLogMgr.GetInstance().ExportAppEventLogs();
+                     SystemEventLogMgr.GetInstance().CollectSystemLog();
                     break;
                 case LogType.LogSandBox:
                     SandBoxLogMgr.GetInstance().CollectLogsFiles(itemInfo);

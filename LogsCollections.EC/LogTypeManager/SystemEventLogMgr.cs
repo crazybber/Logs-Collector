@@ -4,14 +4,14 @@
 
 namespace LogsCollections.EC.LogTypeManager
 {
-   
+
     using System.Diagnostics;
     using System.IO;
     using System.Text;
     using Template;
 
 
-    class SystemEventLogMgr : FilesMgrBase
+    public class SystemEventLogMgr : FilesMgrBase
     {
 
         private static readonly SystemEventLogMgr Instance = SingletonProvider<SystemEventLogMgr>.GetInstance();
@@ -23,6 +23,32 @@ namespace LogsCollections.EC.LogTypeManager
             return Instance;
         }
 
+
+        public void CollectSystemLog()
+        {
+
+            //STEP 1 CheckLogDestinationDir
+            var curLogTypeRootDir = GetCurrentTypeLogRootDir();
+
+            //check dir location.
+            CreateIfNotExist(curLogTypeRootDir);
+            //Step 2 export Systemlog to typeLogDir
+
+            int count2collect;
+            getLogCollectSetting(out  count2collect);
+
+            var systemlogfullpath = Path.Combine(curLogTypeRootDir, "systemevent.log");
+
+            ExportAppEventLogs(systemlogfullpath, count2collect);
+
+            // STEP 3 zip them 
+
+            FileCollectZipMgr.CollectFilesAndZipThem(curLogTypeRootDir);
+
+            //step 4 delete
+
+        }
+
         public void ExportAppEventLogs(string path, int itemNum)
         {
 
@@ -32,6 +58,7 @@ namespace LogsCollections.EC.LogTypeManager
 
 
         }
+
 
 
         /// <summary>
@@ -68,11 +95,14 @@ namespace LogsCollections.EC.LogTypeManager
             while (count-- > 0)
             {
                 var entry = eventLog.Entries[total--];
-                sb.AppendFormat("消息:{0};时间:{1};来源:{2};类型:{3};"
+                if (entry.EntryType != EventLogEntryType.Error | entry.EntryType != EventLogEntryType.Warning)
+                    continue;
+
+                sb.AppendFormat("消息:\n{0};时间:\n{1};来源:\n{2};类型:\n{3};"
                      , entry.Message
                      , entry.TimeGenerated.ToString("yyyy-MM-dd HH:mm:ss.fff")
                      , entry.Source
-                     , entry.EntryType.ToString()
+                     , entry.EntryType
                      );
                 sb.AppendLine();
 
@@ -81,5 +111,30 @@ namespace LogsCollections.EC.LogTypeManager
 
             return sb.ToString();
         }
+
+
+        public override string GetCurrentTypeLogRootDir()
+        {
+            var colletdir = GetNextAllLogTypeRootDirFullPath();
+
+            var systemdirname = Path.Combine(colletdir, "SystemLog");
+
+            return systemdirname;
+
+        }
+
+        private void getLogCollectSetting(out int numtoCollect)
+        {
+            numtoCollect = 0;
+            // TODO.....
+
+
+            if (numtoCollect <= 0)
+            {
+                numtoCollect = 1000;
+            }
+        }
+
+
     }
 }

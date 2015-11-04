@@ -9,11 +9,11 @@ namespace LogsCollections.EC.LogTypeManager
     {
         private static readonly SandBoxLogMgr Instance = SingletonProvider<SandBoxLogMgr>.GetInstance();
         //@"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(|txt|log|\d{1,3}))?$";
-        private const string Pattern1 = @"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(";
+        protected const string Pattern1 = @"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(";
 
-        private const string Pattern2 = @"\d{1,3}))?$";
+        protected const string Pattern2 = @"\d{1,3}))?$";
 
-        public static SandBoxLogMgr GetInstance()
+        public static  SandBoxLogMgr GetInstance()
         {
             return Instance;
         }
@@ -29,7 +29,7 @@ namespace LogsCollections.EC.LogTypeManager
 
         }
 
-        public void CollectLogsFiles(LogItemInfo loginfo)
+        public virtual void CollectLogsFiles(LogItemInfo loginfo)
         {
             //STEP 1 find log location 
             var sandboxlogroot = loginfo.LogItemPaths.First();

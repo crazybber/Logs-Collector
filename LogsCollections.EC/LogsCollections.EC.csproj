@@ -57,6 +57,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="EventArgs\LogItemEventArgs.cs" />
+    <Compile Include="LogTypeManager\AdapterLogMgr.cs" />
     <Compile Include="LogTypeManager\SandBoxLogMgr.cs" />
     <Compile Include="LogTypeManager\FileCollectZipMgr.cs" />
     <Compile Include="LogTypeManager\LogPathSetsMgr.cs" />
