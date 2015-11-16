@@ -43,7 +43,7 @@ namespace LogsCollections.EC.LogTypeManager
 
             // STEP 3 zip them 
 
-            FileCollectZipMgr.zipdir(curLogTypeRootDir);
+            FileCollectZipMgr.Current.zipdir(curLogTypeRootDir);
 
             //step 4 delete
 

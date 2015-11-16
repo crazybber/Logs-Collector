@@ -1,10 +1,21 @@
 ﻿using System.IO;
 using System.Linq;
+using LogsCollections.EC.Template;
 
 namespace LogsCollections.EC.LogTypeManager
 {
     public class EcLocalLogMgr : FilesMgrBase
     {
+
+        private static readonly EcLocalLogMgr Instance = SingletonProvider<EcLocalLogMgr>.GetInstance();
+        //@"^([a-zA-Z]:\\)(?:[\s\.\-\w\(\)]+\\)*?[\w\.\-]{5,20}?(\.(|txt|log|\d{1,3}))?$";
+
+
+        public static EcLocalLogMgr GetInstance()
+        {
+            return Instance;
+        }
+
         public virtual void CollectLogsFiles(LogItemInfo loginfo)
         {
             //STEP 1 find log location
