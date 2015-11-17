@@ -68,13 +68,13 @@ namespace LogsCollections.EC
         {
             var logtype = (LogType)((CheckBox)sender).Tag;
 
-            this.GeneratorLogTypeItemCollection(logtype);
+            GeneratorLogTypeItemCollection(logtype);
 
-            this.chkAll.Checked -= new RoutedEventHandler(this.CheckALL_Checked);
+            chkAll.Checked -= CheckALL_Checked;
 
-            this.CheckSingleHandle();
+            CheckSingleHandle();
 
-            this.chkAll.Checked += new RoutedEventHandler(this.CheckALL_Checked);
+            chkAll.Checked += CheckALL_Checked;
 
             //if (logtype.Equals(LogType.LogAll))
             //{
@@ -87,35 +87,35 @@ namespace LogsCollections.EC
         {
             var logtype = (LogType)((CheckBox)sender).Tag;
 
-            this.GeneratorLogTypeItemCollection(logtype);
+            GeneratorLogTypeItemCollection(logtype);
 
             _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsChecked;
 
-            this.CheckAllHandle();
+            CheckAllHandle();
         }
 
 
         private void CheckAllHandle()
         {
-                    foreach (var item in CheckBoxWrapPanel.Children.Cast<object>()
-                            .Select(child => child as CheckBox)
-                            .Where(item => item != null && item.IsChecked != null))
-                    {
-                        item.Checked -= new RoutedEventHandler(this.CheckSingle_Checked);
-                        item.Checked -= new RoutedEventHandler(this.CheckSingle_Unchecked);
+            foreach (var item in CheckBoxWrapPanel.Children.Cast<object>()
+                    .OfType<CheckBox>()
+                    .Where(item => item.IsChecked != null))
+            {
+                item.Checked -= CheckSingle_Checked;
+                item.Checked -= CheckSingle_Unchecked;
 
-                        item.IsChecked = chkAll.IsChecked;
+                item.IsChecked = chkAll.IsChecked;
 
-                        item.Checked += new RoutedEventHandler(this.CheckSingle_Checked);
-                        item.Checked += new RoutedEventHandler(this.CheckSingle_Unchecked);
-                    }
+                item.Checked += CheckSingle_Checked;
+                item.Checked += CheckSingle_Unchecked;
+            }
 
 
         }
 
         private void CheckALL_Unchecked(object sender, RoutedEventArgs e)
         {
-            this.CheckAllHandle();
+            CheckAllHandle();
 
             var logtype = (LogType)((CheckBox)sender).Tag;
 
@@ -127,11 +127,11 @@ namespace LogsCollections.EC
         private void CheckSingle_Unchecked(object sender, RoutedEventArgs e)
         {
 
-            this.chkAll.Unchecked -= new RoutedEventHandler(this.CheckALL_Unchecked);
+            chkAll.Unchecked -= CheckALL_Unchecked;
 
-            this.CheckSingleHandle();
+            CheckSingleHandle();
 
-            this.chkAll.Unchecked += new RoutedEventHandler(this.CheckALL_Unchecked);
+            chkAll.Unchecked += CheckALL_Unchecked;
 
             var logtype = (LogType)((CheckBox)sender).Tag;
 
@@ -147,17 +147,17 @@ namespace LogsCollections.EC
 
             if (CheckBoxWrapPanel.Children.Count <= 0) return;
 
-            var chkBoxCollectionChecked = CheckBoxWrapPanel.Children.Cast<object>()
-                                                .Select(child => child as CheckBox)
+            var chkBoxCollectionChecked = CheckBoxWrapPanel.Children
+                                                .OfType<CheckBox>()
                                                 .Where(item => item != null && item.IsChecked != null && item.IsChecked == true);
 
-            var chkBoxCollection = CheckBoxWrapPanel.Children.Cast<object>()
-                                    .Select(child => child as CheckBox)
-                                    .Where(item => item != null && item.IsChecked != null);
+            var chkBoxCollection = CheckBoxWrapPanel.Children
+                                    .OfType<CheckBox>()
+                                    .Where(item => item.IsChecked != null);
 
-            bool chkAllChecked = chkBoxCollectionChecked.Count<CheckBox>() == chkBoxCollection.Count<CheckBox>();
+            var chkAllChecked = chkBoxCollectionChecked.Count() == chkBoxCollection.Count();
 
-            this.chkAll.IsChecked = chkAllChecked;
+            chkAll.IsChecked = chkAllChecked;
 
             // throw new System.NotImplementedException();
         }
@@ -173,7 +173,7 @@ namespace LogsCollections.EC
 
             CollectAllLogItems();
 
-            //throw new Exception("我就害你，我就抛异常!");
+           
         }
 
 
@@ -239,18 +239,18 @@ namespace LogsCollections.EC
                     break;
                 case LogType.LogSandBox:
                     SandBoxLogMgr.GetInstance().CollectLogsFiles(itemInfo);
-
                     break;
                 case LogType.LogEc:
+                    EcLocalLogMgr.GetInstance().CollectLogsFiles(itemInfo);
                     break;
                 case LogType.LogAdapter:
+                    AdapterLogMgr.GetInstance().CollectLogsFiles(itemInfo);
                     break;
                 case LogType.LogAll:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
 
             var pathEntryItems = itemInfo.LogItemPaths;
             var index = 0;
@@ -259,10 +259,8 @@ namespace LogsCollections.EC
 
             pathEntryItems.ToList().ForEach(dirpath =>
             {
-                //   FileCollectZipMgr.CollectFilesAndZipThem(dirpath);
-
-
-                Thread.Sleep(800);
+               
+               // Thread.Sleep(800);
                 UpdateProgressBar(new ProcessBarEventArgs
                 {
                     LogItemInfo = itemInfo,
@@ -299,7 +297,7 @@ namespace LogsCollections.EC
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using LogsCollections.EC.Template;
 using System.IO;
-using System.Linq;
+
 
 namespace LogsCollections.EC.LogTypeManager
 {
