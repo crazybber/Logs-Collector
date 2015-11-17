@@ -4,23 +4,29 @@
         xmlns:local="clr-namespace:LogsCollections.EC"
         Title="LogCollection Tools(ver.4.3)" Height="411.842" Width="664.473" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <Grid>
-        <Label Name="SytemInfo" Content="System Info:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="29" FontSize="14"/>
-        <GroupBox Header=" Logs Items" HorizontalAlignment="Left" Margin="74,54,0,0" VerticalAlignment="Top" Height="153" Width="509" FontSize="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38*"/>
+            <RowDefinition Height="83*"/>
+            <RowDefinition Height="71*"/>
+        </Grid.RowDefinitions>
+        <Label Name="SytemInfo" Content="System Info:" HorizontalAlignment="Left" Margin="74,10,0,0" VerticalAlignment="Top" Height="29" FontSize="14"/>
+        <GroupBox Header=" Logs Items" HorizontalAlignment="Left" Margin="74,54,0,0" VerticalAlignment="Top" Height="153" Width="510" FontSize="14" Grid.RowSpan="2">
             <Grid>
                 <WrapPanel Name="CheckBoxWrapPanel" Margin="10,22,10,46" Orientation="Horizontal">
-                    <CheckBox  Content="EC Logs" Tag="{x:Static local:LogType.LogEc}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="128" FontSize="14" Checked="CheckBox_Checked"  Unchecked="CheckBox_Unchecked" />
-                    <CheckBox Content="Sandbox Logs"  Tag="{x:Static local:LogType.LogSandBox}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.145,0.826" FontSize="14" Height="25" Width="126" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
-                    <CheckBox Content="Adapter Logs" Tag="{x:Static local:LogType.LogAdapter}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.145,0.826" FontSize="14" Width="162" Height="27" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                    <CheckBox Content="System Event Logs" Tag="{x:Static local:LogType.LogSysEvent}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="143" FontSize="14" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                    <CheckBox  Content="EC Logs" Tag="{x:Static local:LogType.LogEc}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="230" FontSize="14" Checked="CheckSingle_Checked"  Unchecked="CheckSingle_Unchecked" />
+                    <CheckBox Content="Sandbox Logs"  Tag="{x:Static local:LogType.LogSandBox}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="2.145,0.826" FontSize="14" Height="25" Width="230" Checked="CheckSingle_Checked" Unchecked="CheckSingle_Unchecked" />
+                    <CheckBox Content="Adapter Logs" Tag="{x:Static local:LogType.LogAdapter}" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="2.145,0.826" FontSize="14" Width="230" Height="25" Checked="CheckSingle_Checked" Unchecked="CheckSingle_Unchecked"/>
+                    <CheckBox Content="System Event Logs" Tag="{x:Static local:LogType.LogSysEvent}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="230" FontSize="14" Checked="CheckSingle_Checked" Unchecked="CheckSingle_Unchecked" />
                 </WrapPanel>
-                <CheckBox Content="Select All" Tag="{x:Static local:LogType.LogAll}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="0,0,31,22" Width="102" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                <CheckBox Name="chkAll" Content="Select All" Tag="{x:Static local:LogType.LogAll}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="0,0,28,18" Width="230" Checked="CheckALL_Checked" Unchecked="CheckALL_Unchecked" />
             </Grid>
         </GroupBox>
-        <StackPanel Margin="76,235,71,83" Orientation="Vertical">
+        <StackPanel Margin="76,159,71,83" Orientation="Vertical" Grid.Row="1" Grid.RowSpan="2">
             <TextBlock Name="ProgressLabel"  Text="Collection Status: 0%" HorizontalAlignment="Center" Margin="164,0,175,0" VerticalAlignment="Center" Height="29" FontSize="14"/>
-            <ProgressBar Name="ProgressBar1" HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" Width="491" Margin="10,0"/>
+            <ProgressBar Name="ProgressBar1" Height="18" VerticalAlignment="Top" Margin="0,0,1,0"/>
         </StackPanel>
-        <Button Content="Collect !" HorizontalAlignment="Left" Margin="492,317,0,0" VerticalAlignment="Top" Width="130" Height="37" FontSize="14" Click="Button_Click"/>
+        <Button Name="btnCollect" Content="Collect" HorizontalAlignment="Left" Margin="501,75.836,0,0" VerticalAlignment="Top" Width="80" Height="37" FontSize="14" Click="btnCollect_Click" Grid.Row="2"/>
+        <Button Name="btnExit" Content="Exit" HorizontalAlignment="Left" Margin="367,75.836,0,0" VerticalAlignment="Top" Width="80" Height="37" FontSize="14" Grid.Row="2" Click="btnExit_Click"/>
 
     </Grid>
 </Window>

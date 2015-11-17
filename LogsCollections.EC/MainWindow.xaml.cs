@@ -39,7 +39,6 @@ namespace LogsCollections.EC
                 SytemInfo.Content += "Current OS 32bit";
             }
 
-
             //throw new System.NotImplementedException();
         }
 
@@ -48,55 +47,123 @@ namespace LogsCollections.EC
         private readonly Dictionary<LogType, LogItemInfo> _cbLogTypeItemInfoDic = new Dictionary<LogType, LogItemInfo>();
 
 
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void GeneratorLogTypeItemCollection(LogType logtype)
         {
-            var logtype = (LogType)((CheckBox)sender).Tag;
             if (!_cbLogTypeItemInfoDic.ContainsKey(logtype))
             {
                 _cbLogTypeItemInfoDic[logtype] = new LogItemInfo
                 {
                     CollecetdItemIndex = -1,
                     LogTypeName = logtype,
-                    LogItemPaths = LogPathSetsMgr.GetInstance().GetlogPathByType(logtype),
+                    LogItemPaths = LogPathSetsMgr.GetInstance(_husInstalledDir).GetlogPathByType(logtype),
                     LogItemStatus = Status.IsChecked
 
                 };
             }
+
+            _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsChecked;
+        }
+
+        private void CheckSingle_Checked(object sender, RoutedEventArgs e)
+        {
+            var logtype = (LogType)((CheckBox)sender).Tag;
+
+            this.GeneratorLogTypeItemCollection(logtype);
+
+            this.chkAll.Checked -= new RoutedEventHandler(this.CheckALL_Checked);
+
+            this.CheckSingleHandle();
+
+            this.chkAll.Checked += new RoutedEventHandler(this.CheckALL_Checked);
+
+            //if (logtype.Equals(LogType.LogAll))
+            //{
+            //    CheckAllUnCheckedBox(true);
+            //}
+
+        }
+
+        private void CheckALL_Checked(object sender, RoutedEventArgs e)
+        {
+            var logtype = (LogType)((CheckBox)sender).Tag;
+
+            this.GeneratorLogTypeItemCollection(logtype);
+
             _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsChecked;
 
-            if (logtype.Equals(LogType.LogAll))
-            {
-                CheckAllUnCheckedBox();
-            }
+            this.CheckAllHandle();
+        }
+
+
+        private void CheckAllHandle()
+        {
+                    foreach (var item in CheckBoxWrapPanel.Children.Cast<object>()
+                            .Select(child => child as CheckBox)
+                            .Where(item => item != null && item.IsChecked != null))
+                    {
+                        item.Checked -= new RoutedEventHandler(this.CheckSingle_Checked);
+                        item.Checked -= new RoutedEventHandler(this.CheckSingle_Unchecked);
+
+                        item.IsChecked = chkAll.IsChecked;
+
+                        item.Checked += new RoutedEventHandler(this.CheckSingle_Checked);
+                        item.Checked += new RoutedEventHandler(this.CheckSingle_Unchecked);
+                    }
 
 
         }
 
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void CheckALL_Unchecked(object sender, RoutedEventArgs e)
         {
+            this.CheckAllHandle();
 
             var logtype = (LogType)((CheckBox)sender).Tag;
+
             if (!_cbLogTypeItemInfoDic.ContainsKey(logtype)) return;
+
             _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsUnChecked;
-            // _cbLogTypeItemInfoDic.Remove(logtype); //Remove element
         }
 
-        private void CheckAllUnCheckedBox()
+        private void CheckSingle_Unchecked(object sender, RoutedEventArgs e)
         {
+
+            this.chkAll.Unchecked -= new RoutedEventHandler(this.CheckALL_Unchecked);
+
+            this.CheckSingleHandle();
+
+            this.chkAll.Unchecked += new RoutedEventHandler(this.CheckALL_Unchecked);
+
+            var logtype = (LogType)((CheckBox)sender).Tag;
+
+            if (!_cbLogTypeItemInfoDic.ContainsKey(logtype)) return;
+
+            _cbLogTypeItemInfoDic[logtype].LogItemStatus = Status.IsUnChecked;
+            // _cbLogTypeItemInfoDic.Remove(logtype); //Remove element           
+
+        }
+
+        private void CheckSingleHandle()
+        {
+
             if (CheckBoxWrapPanel.Children.Count <= 0) return;
-            foreach (var item in CheckBoxWrapPanel.Children.Cast<object>()
-                .Select(child => child as CheckBox).
-                Where(item => item != null && item.IsChecked != null && (bool)!item.IsChecked))
-            {
-                item.IsChecked = true;
-            }
+
+            var chkBoxCollectionChecked = CheckBoxWrapPanel.Children.Cast<object>()
+                                                .Select(child => child as CheckBox)
+                                                .Where(item => item != null && item.IsChecked != null && item.IsChecked == true);
+
+            var chkBoxCollection = CheckBoxWrapPanel.Children.Cast<object>()
+                                    .Select(child => child as CheckBox)
+                                    .Where(item => item != null && item.IsChecked != null);
+
+            bool chkAllChecked = chkBoxCollectionChecked.Count<CheckBox>() == chkBoxCollection.Count<CheckBox>();
+
+            this.chkAll.IsChecked = chkAllChecked;
+
             // throw new System.NotImplementedException();
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnCollect_Click(object sender, RoutedEventArgs e)
         {
             if (_cbLogTypeItemInfoDic.Count == 0)
             {
@@ -168,7 +235,7 @@ namespace LogsCollections.EC
             switch (itemInfo.LogTypeName)
             {
                 case LogType.LogSysEvent:
-                     SystemEventLogMgr.GetInstance().CollectSystemLog();
+                    SystemEventLogMgr.GetInstance().CollectSystemLog();
                     break;
                 case LogType.LogSandBox:
                     SandBoxLogMgr.GetInstance().CollectLogsFiles(itemInfo);
@@ -227,6 +294,12 @@ namespace LogsCollections.EC
 
                 ProgressLabel.Text = "Collection Status: " + percent + "%";
             }, DispatcherPriority.Background);
+        }
+
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
