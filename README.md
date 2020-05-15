@@ -1,2 +1,3 @@
-# README #
-EC Log Collect tool 
+# README
+
+Log Collect tool 
