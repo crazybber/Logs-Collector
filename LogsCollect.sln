@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogsCollections.EC", "LogsCollections.EC\LogsCollections.EC.csproj", "{EDD2C3FD-4BE5-488C-A543-46B5FD767FF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogsCollections.EC", "LogsCollections.EC\LogsCollections.csproj", "{EDD2C3FD-4BE5-488C-A543-46B5FD767FF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFUI", "WPFUI\WPFUI\WPFUI.csproj", "{BE0A599E-75F3-4F61-8488-4A67E791FEC9}"
 EndProject
